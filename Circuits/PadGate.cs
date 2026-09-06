@@ -33,11 +33,11 @@ namespace Circuits
             {
                 //Draw small rectangle for the PadGate instead of image
 
-                paper.DrawRectangle(Pens.Red, Left, Top, WIDTH, HEIGHT);
+                paper.FillRectangle(Brushes.Red, Left, Top, WIDTH, HEIGHT);
             }
             else
             {
-                paper.DrawRectangle(Pens.Black, Left, Top, WIDTH, HEIGHT);
+                paper.FillRectangle(Brushes.Black, Left, Top, WIDTH, HEIGHT);
             }
         }
 

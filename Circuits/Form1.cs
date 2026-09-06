@@ -201,6 +201,16 @@ namespace Circuits
             newGate = new PadGate(0, 0);
         }
 
+        private void toolStripButtonInput_Click(object sender, EventArgs e)
+        {
+            newGate = new InputSource(0, 0);
+        }
+
+        private void toolStripButtonOutput_Click(object sender, EventArgs e)
+        {
+            newGate = new OutputLamp(0, 0);
+        }
+
         /// <summary>
         /// Redraws all the graphics for the current circuit.
         /// </summary>
@@ -233,7 +243,10 @@ namespace Circuits
             }
         }
 
-       
+
+
+
+
 
 
 
