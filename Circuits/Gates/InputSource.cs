@@ -14,6 +14,11 @@ namespace Circuits
         protected const int WIDTH = 20;
         protected const int HEIGHT = 20;
 
+        /// <summary>
+        /// Initialises the object to the specified coordinates and adds an output pin.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
         public InputSource(int x, int y) : base(x, y)
         {
             // Add an output pin to the input source
@@ -21,6 +26,10 @@ namespace Circuits
             MoveTo(x, y);
         }
 
+        /// <summary>
+        /// Draws the input source on the given graphics paper.
+        /// </summary>
+        /// <param name="paper"></param>
         public override void Draw(Graphics paper)
         {
             // Draw the pin for the input source
@@ -57,6 +66,20 @@ namespace Circuits
             }
         }
 
+        /// <summary>
+        /// Evaluates the input source and returns its output status.
+        /// </summary>
+        /// <returns></returns>
+        public override bool Evaluate()
+        {
+            return (outputStatus);
+        }
+
+        /// <summary>
+        /// Moves the input source and its pin to the specified coordinates.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
         public override void MoveTo(int x, int y)
         {
             base.MoveTo(x, y);

@@ -29,16 +29,14 @@ namespace Circuits
                 p.Draw(paper);
             }
 
-            // Draw the main part of the input source
-            paper.DrawImage(Properties.Resources.OutputIcon, Left, Top);
             // Draw the output status of the input source
             if (inputStatus)
             {
-                paper.FillRectangle(Brushes.Red, Left, Top, WIDTH, HEIGHT);
+                paper.DrawImage(Properties.Resources.OutputIcon, Left, Top);
             }
             else
             {
-                paper.FillRectangle(Brushes.Black, Left, Top, WIDTH, HEIGHT);
+                paper.DrawImage(Properties.Resources.OutputIconOff, Left, Top);
             }
         }
 
