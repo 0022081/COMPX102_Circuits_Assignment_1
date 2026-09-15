@@ -66,7 +66,27 @@ namespace Circuits
         /// <returns></returns>
         public override bool Evaluate()
         {
-            return pins[0].InputWire.FromPin.Owner.Evaluate() || pins[1].InputWire.FromPin.Owner.Evaluate();
+            try
+            {
+                if (pins[0].InputWire == null || pins[1].InputWire == null) // Throw exception if either input pin is not connected to a wire
+                {
+                    throw new Exception("Input pin not connected to a wire.");
+                }
+                else
+                {
+                    // Get the gates connected to the input pins
+                    Gate inputGate1 = pins[0].InputWire.FromPin.Owner;
+                    Gate inputGate2 = pins[1].InputWire.FromPin.Owner;
+                    // Evaluate the inputs and return the OR result
+                    return inputGate1.Evaluate() || inputGate2.Evaluate();
+                }
+
+            }
+            catch (Exception ex)    // Catch any exceptions that occur during evaluation
+            {
+                Console.WriteLine($"Error evaluating OrGate: {ex.Message}");
+                return false; // Return false if there's an error
+            }
         }
 
         /// <summary>

@@ -60,10 +60,24 @@ namespace Circuits
         /// <returns></returns>
         public override bool Evaluate()
         {
-            // Get the gate connected to the input pin
-            Gate inputGate = pins[0].InputWire.FromPin.Owner;
-            // Return the evaluation of the input gate
-            return inputGate.Evaluate();
+            try
+            {
+                if (pins[0].InputWire == null)   //Throw exception if the input wire is not connected to another gate
+                {
+                    throw new Exception("Cannot clone PadGate with no input wire connected.");
+                }
+                else//If the input wire is connected, create a new instance of PadGate at the same coordinates
+                {
+                    Gate inputGate1 = pins[0].InputWire.FromPin.Owner;
+                    // Evaluate the inputs and return the OR result
+                    return inputGate1.Evaluate();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error cloning PadGate: {ex.Message}");
+                return false;
+            }
         }
 
         /// <summary>

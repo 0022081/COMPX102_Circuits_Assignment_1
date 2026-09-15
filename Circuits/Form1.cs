@@ -196,7 +196,7 @@ namespace Circuits
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void toolStripButton1_Click(object sender, EventArgs e)
+        private void toolStripButtonPad_Click(object sender, EventArgs e)
         {
             newGate = new PadGate(0, 0);
         }
@@ -219,6 +219,46 @@ namespace Circuits
         private void toolStripButtonOutput_Click(object sender, EventArgs e)
         {
             newGate = new OutputLamp(0, 0);
+        }
+
+        /// <summary>
+        /// This will evaluate all of the output lamps in the circuit.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void toolStripButtonEvaluate_Click(object sender, EventArgs e)
+        {
+            foreach (Gate g in gatesList)
+            {
+                if (g is OutputLamp)
+                {
+                    OutputLamp lamp = (OutputLamp)g;
+                    lamp.Evaluate();
+                    Console.WriteLine("Output lamp at " + lamp.Left + "," + lamp.Top + " is " + (lamp.Evaluate() ? "ON" : "OFF"));
+                }
+            }
+            this.Form1_Paint(sender, new PaintEventArgs(this.CreateGraphics(), this.ClientRectangle));   // Redraw the form
+        }
+
+        /// <summary>
+        /// This will clone all of the selected gates in the circuit.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void toolStripButtonClone_Click(object sender, EventArgs e)
+        {
+            // If gate selected create new clone
+            if (current != null)
+            {
+                if (current.Selected)
+                {
+                    Gate newGate = current.Clone();   // Clone the selected gate
+                    newGate.MoveTo(current.Left + 10, current.Top + 10);    // Move the new gate slightly to the right and down
+                    gatesList.Add(newGate);     // Add the new gate to the list of gates
+                }
+            }
+            this.Form1_Paint(sender, new PaintEventArgs(this.CreateGraphics(), this.ClientRectangle));   // Redraw the form
+
         }
 
         /// <summary>
@@ -253,43 +293,7 @@ namespace Circuits
             }
         }
 
-        /// <summary>
-        /// This will evaluate all of the output lamps in the circuit.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void toolStripButton2_Click(object sender, EventArgs e)
-        {
-            foreach(Gate g in gatesList)
-            {
-                if(g is OutputLamp)
-                {
-                    OutputLamp lamp = (OutputLamp)g;
-                    lamp.Evaluate();
-                }
-            }
-        }
-
-        /// <summary>
-        /// This will clone all of the selected gates in the circuit.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void toolStripButton3_Click(object sender, EventArgs e)
-        {
-            // If gate selected create new clone
-            if (current != null)
-            {
-                if(current.Selected)
-                {
-                    Gate newGate = current.Clone();   // Clone the selected gate
-                    newGate.MoveTo(current.Left + 10, current.Top + 10);    // Move the new gate slightly to the right and down
-                    gatesList.Add(newGate);     // Add the new gate to the list of gates
-                }
-            }
-                    
-        }
-
+        
         /// <summary>
         /// Handles events while the mouse button is pressed down.
         /// </summary>

@@ -65,10 +65,25 @@ namespace Circuits
         /// <returns></returns>
         public override bool Evaluate()
         {
-            // Get the gate connected to the input pin
-            Gate inputGate = pins[0].InputWire.FromPin.Owner;
-            // Return the negation of the input gate's evaluation
-            return !inputGate.Evaluate();
+            try
+            {
+                // Check if the input pin is connected to a wire
+                if (pins[0].InputWire == null)
+                {
+                    throw new Exception("Input pin is not connected to a wire.");
+                }
+                else // Pins connected so return the NOT of the input gate's evaluation
+                {
+                    Gate inputGate = pins[0].InputWire.FromPin.Owner;
+                    return !inputGate.Evaluate();
+                }
+
+            }
+            catch (Exception ex)    // Catch any exceptions that occur during evaluation and print an error message
+            {
+                Console.WriteLine($"Error evaluating NOT gate: {ex.Message}");
+                return false;
+            }    
         }
 
         /// <summary>
