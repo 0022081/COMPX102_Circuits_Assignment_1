@@ -7,13 +7,16 @@ using System.Drawing;
 
 namespace Circuits
 {
-    public class OrGate : Gate
+    public class NotGate : Gate
     {
-        const int GAP_OFFSET = 12;
-
-        public OrGate(int x, int y) : base(x, y)
+        /// <summary>
+        /// Initialises the object to the specified coordinates and adds two input pins and one output pin.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        public NotGate(int x, int y) : base(x, y)
         {
-            //Add the two input pins to the gate
+            //Add the input pin to the gate
             pins.Add(new Pin(this, true, 20));
             pins.Add(new Pin(this, true, 20));
             //Add the output pin to the gate
@@ -22,6 +25,10 @@ namespace Circuits
             MoveTo(x, y);
         }
 
+        /// <summary>
+        /// Draws the NOT gate and its pins on the provided Graphics object.
+        /// </summary>
+        /// <param name="paper"></param>
         public override void Draw(Graphics paper)
         {
             //Draw the pins for the gate
@@ -34,12 +41,24 @@ namespace Circuits
 
             if (selected)
             {
-                paper.DrawImage(Properties.Resources.OrGateRed, Left, Top);
+                paper.DrawImage(Properties.Resources.NotGateRed, Left, Top);
             }
             else
             {
-                paper.DrawImage(Properties.Resources.OrGate, Left, Top);
+                paper.DrawImage(Properties.Resources.NotGate, Left, Top);
             }
+        }
+
+        /// <summary>
+        /// Evaluates the output of the NOT gate based on the input pin's value.
+        /// </summary>
+        /// <returns></returns>
+        public override bool Evaluate()
+        {
+            // Get the gate connected to the input pin
+            Gate inputGate = pins[0].InputWire.FromPin.Owner;
+            // Return the negation of the input gate's evaluation
+            return !inputGate.Evaluate();
         }
 
         /// <summary>
@@ -55,7 +74,7 @@ namespace Circuits
             pins[0].Y = y + GAP;
             pins[1].X = x - GAP;
             pins[1].Y = y + HEIGHT - GAP;
-            pins[2].X = x + WIDTH + GAP + GAP_OFFSET;
+            pins[2].X = x + WIDTH + GAP;
             pins[2].Y = y + HEIGHT / 2;
         }
     }

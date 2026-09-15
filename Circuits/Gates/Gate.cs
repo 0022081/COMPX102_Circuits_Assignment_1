@@ -40,7 +40,6 @@ namespace Circuits
 
         }
 
-
         /// <summary>
         /// Gets and sets whether the fate is selected or not.
         /// </summary>
@@ -94,6 +93,12 @@ namespace Circuits
         /// </summary>
         /// <param name="paper"></param>
         public abstract void Draw(Graphics paper);
+
+        /// <summary>
+        /// Evaluates the gate and returns the output value.
+        /// </summary>
+        /// <returns></returns>
+        public abstract bool Evaluate();
 
         /// <summary>
         /// Moves the gate to the position specified.

@@ -7,21 +7,11 @@ using System.Threading.Tasks;
 
 namespace Circuits
 {
-    /// <summary>
-    /// This class implements an AND gate with two inputs
-    /// and one output.
-    /// </summary>
-    public class AndGate : Gate
+    public class PadGate : Gate
     {
-        /// <summary>
-        /// Initialises the Gate.
-        /// </summary>
-        /// <param name="x">The x position of the gate</param>
-        /// <param name="y">The y position of the gate</param>
-        public AndGate(int x, int y) : base(x, y)
+        public PadGate(int x, int y) : base(x, y)
         {
-            //Add the two input pins to the gate
-            pins.Add(new Pin(this, true, 20));
+            //Add the input pin to the gate
             pins.Add(new Pin(this, true, 20));
             //Add the output pin to the gate
             pins.Add(new Pin(this, false, 20));
@@ -30,7 +20,7 @@ namespace Circuits
         }
 
         /// <summary>
-        /// Draws the gate in the normal colour or in the selected colour.
+        /// Draws the gate and its pins to the graphics object passed in.
         /// </summary>
         /// <param name="paper"></param>
         public override void Draw(Graphics paper)
@@ -41,23 +31,30 @@ namespace Circuits
                 p.Draw(paper);
             }
 
-
             //Now draw the main part of the gate after setting which image to use based on whether the gate is selected or not
 
             if (selected)
             {
-                paper.DrawImage(Properties.Resources.AndGateRed, Left, Top);
+                //Draw small rectangle for the PadGate instead of image
+
+                paper.FillRectangle(Brushes.Red, Left, Top, WIDTH, HEIGHT);
             }
             else
             {
-                paper.DrawImage(Properties.Resources.AndGate, Left, Top);
+                paper.FillRectangle(Brushes.Black, Left, Top, WIDTH, HEIGHT);
             }
-            //Note: You can also use the images that have been imported into the project if you wish,
-            //      using the code below.  You will need to space the pins out a bit more in the constructor.
-            //      There are provided images for the other gates and selected versions of the gates as well.
-            //paper.DrawImage(Properties.Resources.AndGate, Left, Top);
+        }
 
-
+        /// <summary>
+        /// Evaluates the gate and returns the result of the evaluation.
+        /// </summary>
+        /// <returns></returns>
+        public override bool Evaluate()
+        {
+            // Get the gate connected to the input pin
+            Gate inputGate = pins[0].InputWire.FromPin.Owner;
+            // Return the evaluation of the input gate
+            return inputGate.Evaluate();
         }
 
         /// <summary>
@@ -70,11 +67,9 @@ namespace Circuits
             base.MoveTo(x, y);
             // must move the pins too
             pins[0].X = x - GAP;
-            pins[0].Y = y + GAP;
-            pins[1].X = x - GAP;
-            pins[1].Y = y + HEIGHT - GAP;
-            pins[2].X = x + WIDTH + GAP;
-            pins[2].Y = y + HEIGHT / 2;
+            pins[0].Y = y + HEIGHT / 2;
+            pins[1].X = x + WIDTH + GAP;
+            pins[1].Y = y + HEIGHT / 2;
         }
     }
 }

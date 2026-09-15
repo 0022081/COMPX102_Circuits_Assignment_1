@@ -1,17 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
 
 namespace Circuits
 {
-    public class PadGate : Gate
+    public class OrGate : Gate
     {
-        public PadGate(int x, int y) : base(x, y)
+        const int GAP_OFFSET = 12;
+
+        /// <summary>
+        /// Initialises the object to the specified coordinates and adds two input pins and one output pin.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        public OrGate(int x, int y) : base(x, y)
         {
-            //Add the input pin to the gate
+            //Add the two input pins to the gate
+            pins.Add(new Pin(this, true, 20));
             pins.Add(new Pin(this, true, 20));
             //Add the output pin to the gate
             pins.Add(new Pin(this, false, 20));
@@ -19,6 +27,10 @@ namespace Circuits
             MoveTo(x, y);
         }
 
+        /// <summary>
+        /// Draws the gate and its pins to the graphics object passed in.
+        /// </summary>
+        /// <param name="paper"></param>
         public override void Draw(Graphics paper)
         {
             //Draw the pins for the gate
@@ -31,14 +43,17 @@ namespace Circuits
 
             if (selected)
             {
-                //Draw small rectangle for the PadGate instead of image
-
-                paper.DrawRectangle(Pens.Red, Left, Top, WIDTH, HEIGHT);
+                paper.DrawImage(Properties.Resources.OrGateRed, Left, Top);
             }
             else
             {
-                paper.DrawRectangle(Pens.Black, Left, Top, WIDTH, HEIGHT);
+                paper.DrawImage(Properties.Resources.OrGate, Left, Top);
             }
+        }
+
+        public override bool Evaluate()
+        {
+            return pins[0].InputWire.FromPin.Owner.Evaluate() || pins[1].InputWire.FromPin.Owner.Evaluate();
         }
 
         /// <summary>
@@ -51,9 +66,11 @@ namespace Circuits
             base.MoveTo(x, y);
             // must move the pins too
             pins[0].X = x - GAP;
-            pins[0].Y = y + HEIGHT / 2;
-            pins[1].X = x + WIDTH + GAP;
-            pins[1].Y = y + HEIGHT / 2;
+            pins[0].Y = y + GAP;
+            pins[1].X = x - GAP;
+            pins[1].Y = y + HEIGHT - GAP;
+            pins[2].X = x + WIDTH + GAP + GAP_OFFSET;
+            pins[2].Y = y + HEIGHT / 2;
         }
     }
 }
