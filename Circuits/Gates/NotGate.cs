@@ -9,6 +9,11 @@ namespace Circuits
 {
     public class NotGate : Gate
     {
+        /// <summary>
+        /// Initialises the object to the specified coordinates and adds two input pins and one output pin.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
         public NotGate(int x, int y) : base(x, y)
         {
             //Add the input pin to the gate
@@ -20,6 +25,10 @@ namespace Circuits
             MoveTo(x, y);
         }
 
+        /// <summary>
+        /// Draws the NOT gate and its pins on the provided Graphics object.
+        /// </summary>
+        /// <param name="paper"></param>
         public override void Draw(Graphics paper)
         {
             //Draw the pins for the gate
@@ -38,6 +47,18 @@ namespace Circuits
             {
                 paper.DrawImage(Properties.Resources.NotGate, Left, Top);
             }
+        }
+
+        /// <summary>
+        /// Evaluates the output of the NOT gate based on the input pin's value.
+        /// </summary>
+        /// <returns></returns>
+        public override bool Evaluate()
+        {
+            // Get the gate connected to the input pin
+            Gate inputGate = pins[0].InputWire.FromPin.Owner;
+            // Return the negation of the input gate's evaluation
+            return !inputGate.Evaluate();
         }
 
         /// <summary>

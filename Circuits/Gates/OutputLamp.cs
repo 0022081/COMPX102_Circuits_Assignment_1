@@ -14,6 +14,11 @@ namespace Circuits
         protected const int WIDTH = 20;
         protected const int HEIGHT = 20;
 
+        /// <summary>
+        /// Initialises the object to the specified coordinates and adds an input pin.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
         public OutputLamp(int x, int y) : base(x, y)
         {
             // Add an input pin to the output lamp
@@ -21,6 +26,10 @@ namespace Circuits
             MoveTo(x, y);
         }
 
+        /// <summary>
+        /// Draws the output lamp on the given graphics context.
+        /// </summary>
+        /// <param name="paper"></param>
         public override void Draw(Graphics paper)
         {
             // Draw the pin for the input source
@@ -38,8 +47,29 @@ namespace Circuits
             {
                 paper.DrawImage(Properties.Resources.OutputIconOff, Left, Top);
             }
+
+            if (selected)
+            {
+                paper.DrawImage(Properties.Resources.OutputIconRed, Left, Top);
+            }
         }
 
+        /// <summary>
+        /// Evaluates the output lamp's status based on the input gate's evaluation.
+        /// </summary>
+        /// <returns></returns>
+        public override bool Evaluate()
+        {
+            Gate gateA = pins[0].InputWire.FromPin.Owner;
+            inputStatus = gateA.Evaluate(); // Set output status based on the input gate's evaluation
+            return inputStatus;
+        }
+
+        /// <summary>
+        /// Moves the output lamp and its pin to the specified coordinates.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
         public override void MoveTo(int x, int y)
         {
             base.MoveTo(x, y);

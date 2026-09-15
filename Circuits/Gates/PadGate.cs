@@ -19,6 +19,10 @@ namespace Circuits
             MoveTo(x, y);
         }
 
+        /// <summary>
+        /// Draws the gate and its pins to the graphics object passed in.
+        /// </summary>
+        /// <param name="paper"></param>
         public override void Draw(Graphics paper)
         {
             //Draw the pins for the gate
@@ -39,6 +43,18 @@ namespace Circuits
             {
                 paper.FillRectangle(Brushes.Black, Left, Top, WIDTH, HEIGHT);
             }
+        }
+
+        /// <summary>
+        /// Evaluates the gate and returns the result of the evaluation.
+        /// </summary>
+        /// <returns></returns>
+        public override bool Evaluate()
+        {
+            // Get the gate connected to the input pin
+            Gate inputGate = pins[0].InputWire.FromPin.Owner;
+            // Return the evaluation of the input gate
+            return inputGate.Evaluate();
         }
 
         /// <summary>

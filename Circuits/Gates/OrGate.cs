@@ -11,6 +11,11 @@ namespace Circuits
     {
         const int GAP_OFFSET = 12;
 
+        /// <summary>
+        /// Initialises the object to the specified coordinates and adds two input pins and one output pin.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
         public OrGate(int x, int y) : base(x, y)
         {
             //Add the two input pins to the gate
@@ -22,6 +27,10 @@ namespace Circuits
             MoveTo(x, y);
         }
 
+        /// <summary>
+        /// Draws the gate and its pins to the graphics object passed in.
+        /// </summary>
+        /// <param name="paper"></param>
         public override void Draw(Graphics paper)
         {
             //Draw the pins for the gate
@@ -40,6 +49,11 @@ namespace Circuits
             {
                 paper.DrawImage(Properties.Resources.OrGate, Left, Top);
             }
+        }
+
+        public override bool Evaluate()
+        {
+            return pins[0].InputWire.FromPin.Owner.Evaluate() || pins[1].InputWire.FromPin.Owner.Evaluate();
         }
 
         /// <summary>

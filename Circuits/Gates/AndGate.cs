@@ -61,6 +61,36 @@ namespace Circuits
         }
 
         /// <summary>
+        /// Evaluates the AND gate based on the values of the input pins.
+        /// </summary>
+        /// <returns></returns>
+        public override bool Evaluate()
+        {
+            try
+            {
+                // Check if the input pins are connected to wires
+                if (pins[0].InputWire == null || pins[1].InputWire == null)
+                {
+                    throw new Exception("Input pins are not connected to any wires.");
+                }
+                // Evaluate the AND gate based on the values of the input pins
+                else
+                {
+                    Gate gateA = pins[0].InputWire.FromPin.Owner;
+                    Gate gateB = pins[1].InputWire.FromPin.Owner;
+                    return gateA.Evaluate() && gateB.Evaluate();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error evaluating AND gate: {ex.Message}");
+                return false;
+            }
+            
+        }
+
+        /// <summary>
         /// Moves the gate to the position specified.
         /// </summary>
         /// <param name="x">The x position to move the gate to</param>

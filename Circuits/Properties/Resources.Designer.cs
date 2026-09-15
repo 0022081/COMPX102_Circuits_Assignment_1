@@ -243,6 +243,16 @@ namespace Circuits.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap OutputIconRed {
+            get {
+                object obj = ResourceManager.GetObject("OutputIconRed", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap StartCompoundIcon {
             get {
                 object obj = ResourceManager.GetObject("StartCompoundIcon", resourceCulture);

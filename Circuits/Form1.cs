@@ -243,6 +243,18 @@ namespace Circuits
             }
         }
 
+        private void toolStripButton2_Click(object sender, EventArgs e)
+        {
+            foreach(Gate g in gatesList)
+            {
+                if(g is OutputLamp)
+                {
+                    OutputLamp lamp = (OutputLamp)g;
+                    lamp.Evaluate();
+                }
+            }
+        }
+
 
 
 
