@@ -101,6 +101,11 @@ namespace Circuits
         public abstract bool Evaluate();
 
         /// <summary>
+        /// Clone the currently selected gate (make exact copy)
+        /// </summary>
+        public abstract Gate Clone();
+
+        /// <summary>
         /// Moves the gate to the position specified.
         /// </summary>
         /// <param name="x">The x position to move the gate to</param>

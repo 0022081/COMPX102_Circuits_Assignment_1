@@ -46,6 +46,15 @@ namespace Circuits
         }
 
         /// <summary>
+        /// Clones the input source by creating a new instance at the same coordinates.
+        /// </summary>
+        public override Gate Clone()
+        {
+            PadGate newPadGate = new PadGate(Left, Top);
+            return newPadGate;
+        }
+
+        /// <summary>
         /// Evaluates the gate and returns the result of the evaluation.
         /// </summary>
         /// <returns></returns>

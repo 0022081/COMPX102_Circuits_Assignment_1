@@ -51,6 +51,19 @@ namespace Circuits
             }
         }
 
+        /// <summary>
+        /// Clones the input source by creating a new instance at the same coordinates.
+        /// </summary>
+        public override Gate Clone()
+        {
+            OrGate newOrGate = new OrGate(Left, Top);
+            return newOrGate;
+        }
+
+        /// <summary>
+        /// Evaluates the output of the gate based on the inputs from the connected pins.
+        /// </summary>
+        /// <returns></returns>
         public override bool Evaluate()
         {
             return pins[0].InputWire.FromPin.Owner.Evaluate() || pins[1].InputWire.FromPin.Owner.Evaluate();

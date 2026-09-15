@@ -61,6 +61,15 @@ namespace Circuits
         }
 
         /// <summary>
+        /// Clones the gate to create a new instance of the gate at the same position.
+        /// </summary>
+        public override Gate Clone()
+        {
+            AndGate newGate = new AndGate(Left, Top);
+            return newGate;
+        }
+
+        /// <summary>
         /// Evaluates the AND gate based on the values of the input pins.
         /// </summary>
         /// <returns></returns>

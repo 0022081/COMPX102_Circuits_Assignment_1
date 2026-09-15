@@ -67,6 +67,15 @@ namespace Circuits
         }
 
         /// <summary>
+        /// Clones the input source by creating a new instance at the same coordinates.
+        /// </summary>
+        public override Gate Clone()
+        {
+            InputSource newInputSource = new InputSource(Left, Top);
+            return newInputSource;
+        }
+
+        /// <summary>
         /// Evaluates the input source and returns its output status.
         /// </summary>
         /// <returns></returns>

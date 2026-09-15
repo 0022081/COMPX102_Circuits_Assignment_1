@@ -50,6 +50,16 @@ namespace Circuits
         }
 
         /// <summary>
+        /// Clones the input source by creating a new instance at the same coordinates.
+        /// </summary>
+        /// <returns></returns>
+        public override Gate Clone()
+        {
+            NotGate newNotGate = new NotGate(Left, Top);
+            return newNotGate;
+        }
+
+        /// <summary>
         /// Evaluates the output of the NOT gate based on the input pin's value.
         /// </summary>
         /// <returns></returns>

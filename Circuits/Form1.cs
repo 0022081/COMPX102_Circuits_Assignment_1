@@ -201,11 +201,21 @@ namespace Circuits
             newGate = new PadGate(0, 0);
         }
 
+        /// <summary>
+        /// This will create a new Input source.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void toolStripButtonInput_Click(object sender, EventArgs e)
         {
             newGate = new InputSource(0, 0);
         }
 
+        /// <summary>
+        /// This will create a new Output lamp.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void toolStripButtonOutput_Click(object sender, EventArgs e)
         {
             newGate = new OutputLamp(0, 0);
@@ -243,6 +253,11 @@ namespace Circuits
             }
         }
 
+        /// <summary>
+        /// This will evaluate all of the output lamps in the circuit.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void toolStripButton2_Click(object sender, EventArgs e)
         {
             foreach(Gate g in gatesList)
@@ -255,12 +270,25 @@ namespace Circuits
             }
         }
 
-
-
-
-
-
-
+        /// <summary>
+        /// This will clone all of the selected gates in the circuit.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void toolStripButton3_Click(object sender, EventArgs e)
+        {
+            // If gate selected create new clone
+            if (current != null)
+            {
+                if(current.Selected)
+                {
+                    Gate newGate = current.Clone();   // Clone the selected gate
+                    newGate.MoveTo(current.Left + 10, current.Top + 10);    // Move the new gate slightly to the right and down
+                    gatesList.Add(newGate);     // Add the new gate to the list of gates
+                }
+            }
+                    
+        }
 
         /// <summary>
         /// Handles events while the mouse button is pressed down.
