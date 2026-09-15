@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonAnd = new System.Windows.Forms.ToolStripButton();
@@ -38,6 +39,7 @@
             this.toolStripButtonOutput = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonEvaluate = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonClone = new System.Windows.Forms.ToolStripButton();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -141,6 +143,10 @@
             this.toolStripButtonClone.Text = "toolStripButton3";
             this.toolStripButtonClone.Click += new System.EventHandler(this.toolStripButtonClone_Click);
             // 
+            // timer1
+            // 
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -152,7 +158,6 @@
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Circuits 2023";
-            //this.Load += new System.EventHandler(this.Form1_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.Form1_Paint);
             this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseClick);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseDown);
@@ -176,6 +181,7 @@
         private System.Windows.Forms.ToolStripButton toolStripButtonOutput;
         private System.Windows.Forms.ToolStripButton toolStripButtonEvaluate;
         private System.Windows.Forms.ToolStripButton toolStripButtonClone;
+        private System.Windows.Forms.Timer timer1;
     }
 }
 

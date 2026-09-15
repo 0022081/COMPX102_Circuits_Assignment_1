@@ -56,7 +56,7 @@ namespace Circuits
             // Draw the output status of the input source
             if (outputStatus)
             {
-                paper.FillRectangle(Brushes.Red, Left, Top, WIDTH, HEIGHT);
+                paper.FillRectangle(Brushes.GreenYellow, Left, Top, WIDTH, HEIGHT);
             }
             else
             {
@@ -81,7 +81,9 @@ namespace Circuits
         /// <returns></returns>
         public override bool Evaluate()
         {
+            Console.WriteLine("Input Source Evaluated: " + outputStatus);
             return (outputStatus);
+            
         }
 
         /// <summary>

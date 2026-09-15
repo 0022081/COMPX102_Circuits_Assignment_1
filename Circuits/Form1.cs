@@ -293,7 +293,12 @@ namespace Circuits
             }
         }
 
-        
+        //private void timer1_Tick(object sender, EventArgs e)
+        //{
+        //    this.Form1_Paint(sender, new PaintEventArgs(this.CreateGraphics(), this.ClientRectangle));   // Redraw the form
+        //}
+
+
         /// <summary>
         /// Handles events while the mouse button is pressed down.
         /// </summary>
