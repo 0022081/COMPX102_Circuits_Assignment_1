@@ -9,6 +9,32 @@ namespace Circuits
 {
     public class PadGate : Gate
     {
+        /// <summary>
+        /// The width of the PadGate.
+        /// </summary>
+        protected const int WIDTH = 25;
+        /// <summary>
+        /// The height of the PadGate.
+        /// </summary>
+        protected const int HEIGHT = 25;
+        /// <summary>
+        /// The width of the icon within the PadGate.
+        /// </summary>
+        protected const int ICON_WIDTH = 12;
+        /// <summary>
+        /// The height of the icon within the PadGate.
+        /// </summary>
+        protected const int ICON_HEIGHT = 12;
+        /// <summary>
+        /// The offset for the icon within the PadGate.
+        /// </summary>
+        protected const int ICON_OFFSET = 6;
+
+        /// <summary>
+        /// Initialises the object to the specified coordinates and adds an input pin and an output pin.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
         public PadGate(int x, int y) : base(x, y)
         {
             //Add the input pin to the gate
@@ -33,11 +59,11 @@ namespace Circuits
 
             //Now draw the main part of the gate after setting which image to use based on whether the gate is selected or not
 
-            if (selected)
+            if (Selected)
             {
                 //Draw small rectangle for the PadGate instead of image
-
-                paper.FillRectangle(Brushes.Red, Left, Top, WIDTH, HEIGHT);
+                paper.FillRectangle(Brushes.Black, Left, Top, WIDTH, HEIGHT);
+                paper.FillRectangle(Brushes.Red, Left + ICON_OFFSET, Top + ICON_OFFSET, ICON_WIDTH, ICON_HEIGHT);
             }
             else
             {

@@ -268,6 +268,11 @@ namespace Circuits
         /// <param name="e"></param>
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
+
+            Color backColor = ColorTranslator.FromHtml("#696969");
+            // Clear the background
+            e.Graphics.Clear(backColor);
+
             //Draw all of the gates
             foreach (Gate g in gatesList)
             {

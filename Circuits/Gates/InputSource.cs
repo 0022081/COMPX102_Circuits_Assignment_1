@@ -9,10 +9,40 @@ namespace Circuits
 {
     public class InputSource : Gate
     {
+        /// <summary>
+        /// Set the output status of the input source. True for high, false for low.
+        /// </summary>
         protected bool outputStatus = false;
 
+        /// <summary>
+        /// The width of the input source.
+        /// </summary>
         protected const int WIDTH = 20;
+
+        /// <summary>
+        /// The height of the input source.
+        /// </summary>
         protected const int HEIGHT = 20;
+
+        /// <summary>
+        /// The width of the icon within the input source.
+        /// </summary>
+        protected const int ICON_WIDTH = 8;
+
+        /// <summary>
+        /// The height of the icon within the input source.
+        /// </summary>
+        protected const int ICON_HEIGHT = 8;
+
+        /// <summary>
+        /// The offset for the icon within the input source.
+        /// </summary>
+        protected const int ICON_OFFSET = 6;
+
+        /// <summary>
+        /// The gap between the input source and its output pin.
+        /// </summary>
+        protected const int GAP = 12;
 
         /// <summary>
         /// Initialises the object to the specified coordinates and adds an output pin.
@@ -39,7 +69,7 @@ namespace Circuits
             }
 
             // Toggle the output status when the input source is clicked
-            if (selected)
+            if (Selected)
             {
                 if (outputStatus)
                 {
@@ -51,18 +81,21 @@ namespace Circuits
                 }
             }
 
-            // Draw the main part of the input source
-            paper.DrawImage(Properties.Resources.InputIcon, Left, Top);
+            
             // Draw the output status of the input source
             if (outputStatus)
             {
-                paper.FillRectangle(Brushes.GreenYellow, Left, Top, WIDTH, HEIGHT);
+                // Draw the main part of the input source
+                paper.DrawImage(Properties.Resources.InputIcon, Left, Top);
+                // Draw green filled rectangle
+                paper.FillRectangle(Brushes.GreenYellow, Left + (ICON_OFFSET / 2), Top + ICON_OFFSET, ICON_WIDTH, ICON_HEIGHT);
             }
             else
             {
-                paper.FillRectangle(Brushes.Black, Left, Top, WIDTH, HEIGHT);
-                //Draw black filled rectangle
-
+                // Draw the main part of the input source
+                paper.DrawImage(Properties.Resources.InputIcon, Left, Top);
+                // Draw black filled rectangle
+                paper.FillRectangle(Brushes.Black, Left + (ICON_OFFSET / 2), Top + ICON_OFFSET, ICON_WIDTH, ICON_HEIGHT);
             }
         }
 

@@ -83,9 +83,22 @@ namespace Circuits
         {
             if (left <= x && x < left + WIDTH
                 && top <= y && y < top + HEIGHT)
+            {
+                if(Selected)
+                {
+                    selected = false;
+                }
+                else
+                {
+                    Selected = true;
+                }
                 return true;
+            }
             else
+            {
                 return false;
+            }
+                
         }
 
         /// <summary>

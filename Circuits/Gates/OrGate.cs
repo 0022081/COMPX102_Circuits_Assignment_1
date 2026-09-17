@@ -41,7 +41,7 @@ namespace Circuits
 
             //Now draw the main part of the gate after setting which image to use based on whether the gate is selected or not
 
-            if (selected)
+            if (Selected)
             {
                 paper.DrawImage(Properties.Resources.OrGateRed, Left, Top);
             }
