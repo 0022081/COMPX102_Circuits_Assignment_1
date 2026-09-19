@@ -54,6 +54,11 @@ namespace Circuits
         /// </summary>
         protected Gate newGate = null;
 
+        /// <summary>
+        /// The new compound gate that is about to be inserted into the circuit
+        /// </summary>
+        protected Compound newCompound = null;
+
         public Form1()
         {
             InitializeComponent();
@@ -237,7 +242,7 @@ namespace Circuits
                     Console.WriteLine("Output lamp at " + lamp.Left + "," + lamp.Top + " is " + (lamp.Evaluate() ? "ON" : "OFF"));
                 }
             }
-            this.Form1_Paint(sender, new PaintEventArgs(this.CreateGraphics(), this.ClientRectangle));   // Redraw the form
+            this.Invalidate();   // Redraw the form
         }
 
         /// <summary>
@@ -257,8 +262,18 @@ namespace Circuits
                     gatesList.Add(newGate);     // Add the new gate to the list of gates
                 }
             }
-            this.Form1_Paint(sender, new PaintEventArgs(this.CreateGraphics(), this.ClientRectangle));   // Redraw the form
+            this.Invalidate();   // Redraw the form
 
+        }
+
+        /// <summary>
+        /// This will create a new Compound gate.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void toolStripButtonCompount_Click(object sender, EventArgs e)
+        {
+            Compound newCompound = new Compound(0, 0);
         }
 
         /// <summary>
@@ -298,11 +313,16 @@ namespace Circuits
             }
         }
 
-        //private void timer1_Tick(object sender, EventArgs e)
-        //{
-        //    this.Form1_Paint(sender, new PaintEventArgs(this.CreateGraphics(), this.ClientRectangle));   // Redraw the form
-        //}
-
+        /// <summary>
+        /// This will add the selected gate to the compound gate.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void toolStripButtonEndCompount_Click(object sender, EventArgs e)
+        {
+            newGate = newCompound; // Add the selected compound gate to its own gate
+            newCompound = null;    // Clear the new compound gate variable
+        }
 
         /// <summary>
         /// Handles events while the mouse button is pressed down.
@@ -336,6 +356,12 @@ namespace Circuits
             //Check if a gate is currently selected
             if (current != null)
             {
+                if(newCompound != null)
+                {
+                    //Add the selected gate to the compound gate
+                    newCompound.AddGate(current);
+                }
+
                 //Unselect the selected gate
                 current.Selected = false;
                 current = null;

@@ -87,7 +87,14 @@ namespace Circuits
                 {
                     Gate gateA = pins[0].InputWire.FromPin.Owner;
                     Gate gateB = pins[1].InputWire.FromPin.Owner;
-                    return gateA.Evaluate() && gateB.Evaluate();
+                    if(gateA.Evaluate() == false || gateB.Evaluate() == false)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        return true;
+                    }
                 }
 
             }
