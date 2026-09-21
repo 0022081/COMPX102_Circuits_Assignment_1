@@ -397,6 +397,15 @@ namespace Circuits
                         {
                             //Add the selected gate to the compound gate
                             newCompound.AddGate(current);
+                            // Move any wires that now lie entirely inside the compound
+                            var wiresToMove = wiresList.Where(w => newCompound.CompGatesList.Contains(w.FromPin.Owner)
+                                                                    && newCompound.CompGatesList.Contains(w.ToPin.Owner))
+                                                      .ToList();
+                            foreach (var w in wiresToMove)
+                            {
+                                wiresList.Remove(w);
+                                newCompound.CompWiresList.Add(w);
+                            }
                             //Remove the selected gate from the gates list
                             gatesList.Remove(current);
                             current.Selected = false;

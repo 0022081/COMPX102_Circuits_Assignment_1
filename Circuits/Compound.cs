@@ -13,6 +13,12 @@ namespace Circuits
         /// A list of gates that make up the compound gate.
         /// </summary>
         protected List<Gate> compGatesList = new List<Gate>();
+        /// <summary>
+        /// A list of wires that connect gates inside this compound.
+        /// These are wires whose FromPin.Owner and ToPin.Owner are both
+        /// inside CompGatesList.
+        /// </summary>
+        protected List<Wire> compWiresList = new List<Wire>();
 
         /// <summary>
         /// Gets and sets the left coordinate of the compound gate.
@@ -61,6 +67,15 @@ namespace Circuits
         }
 
         /// <summary>
+        /// Gets/sets the list of wires that belong to this compound gate.
+        /// </summary>
+        public List<Wire> CompWiresList
+        {
+            get { return compWiresList; }
+            set { compWiresList = value; }
+        }
+
+        /// <summary>
         /// Initialises the object to the specified coordinates and adds an input pin and an output pin.
         /// </summary>
         /// <param name="x"></param>
@@ -104,6 +119,12 @@ namespace Circuits
             {
                 g.Draw(paper);
             }
+
+            // Draw wires that belong to this compound (internal connections)
+            foreach (Wire w in CompWiresList)
+            {
+                w.Draw(paper);
+            }
         }
 
         /// <summary>
@@ -134,14 +155,44 @@ namespace Circuits
         /// <returns></returns>
         public override Gate Clone()
         {
-            // Need to clone wires as well
-
+            // Create new compound gate at the 
             Compound newCompound = new Compound(Left, Top);
+
+            // Mapping from original gate/pin to cloned gate/pin
+            Dictionary<Gate, Gate> gateMap = new Dictionary<Gate, Gate>();
+            Dictionary<Pin, Pin> pinMap = new Dictionary<Pin, Pin>();
+
+            // First clone gates and build pin mapping (assumes Clone creates pins in same order)
             foreach (Gate g in CompGatesList)
             {
                 Gate cloned = g.Clone();
                 newCompound.AddGate(cloned);
+
+                //##
+                gateMap[g] = cloned;
+                // map pins by index
+                for (int i = 0; i < g.Pins.Count && i < cloned.Pins.Count; i++)
+                {
+                    pinMap[g.Pins[i]] = cloned.Pins[i];
+                }
             }
+
+            // Now clone internal wires (wires between gates inside this compound)
+            foreach (Wire w in CompWiresList)
+            {
+                Pin origFrom = w.FromPin;
+                Pin origTo = w.ToPin;
+                if (pinMap.ContainsKey(origFrom) && pinMap.ContainsKey(origTo))
+                {
+                    Pin clonedFrom = pinMap[origFrom];
+                    Pin clonedTo = pinMap[origTo];
+                    Wire clonedWire = new Wire(clonedFrom, clonedTo);
+                    // set the input pin's InputWire so evaluation and drawing work
+                    clonedTo.InputWire = clonedWire;
+                    newCompound.CompWiresList.Add(clonedWire);
+                }
+            }
+            //##
             return newCompound;
         }
 
