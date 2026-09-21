@@ -4,6 +4,8 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -14,8 +16,17 @@ namespace Circuits
     /// The main GUI for the COMPX102 digital circuits editor.
     /// This has a toolbar, containing buttons called buttonAnd, buttonOr, etc.
     /// The contents of the circuit are drawn directly onto the form.
-    /// 
     /// </summary>
+    /// 
+
+    //1.	Is it a better idea to fully document the Gate class or the AndGate subclass? Can you inherit comments? 
+ 
+    //2.	What is the advantage of making a method abstract in the superclass rather than just writing a virtual method with no code in the body of the method? Is there any disadvantage to an abstract method? 
+ 
+    //3.	If a class has an abstract method in it, does the class have to be abstract? 
+ 
+    //4.	What would happen in your program if one of the gates added to your Compound Gate is another Compound Gate? Is your design robust enough to cope with this situation?
+    
     public partial class Form1 : Form
     {
         /// <summary>
@@ -94,14 +105,14 @@ namespace Circuits
         {
             if (startPin != null)
             {
-                Console.WriteLine("wire from " + startPin + " to " + e.X + "," + e.Y);
+                //Console.WriteLine("wire from " + startPin + " to " + e.X + "," + e.Y);
                 currentX = e.X;
                 currentY = e.Y;
                 this.Invalidate();  // this will draw the line
             }
             else if (startX >= 0 && startY >= 0 && current != null)
             {
-                Console.WriteLine("mouse move to " + e.X + "," + e.Y);
+                //Console.WriteLine("mouse move to " + e.X + "," + e.Y);
                 current.MoveTo(currentX + (e.X - startX), currentY + (e.Y - startY));
                 this.Invalidate();
             }
@@ -126,7 +137,7 @@ namespace Circuits
                 Pin endPin = findPin(e.X, e.Y);
                 if (endPin != null)
                 {
-                    Console.WriteLine("Trying to connect " + startPin + " to " + endPin);
+                    //Console.WriteLine("Trying to connect " + startPin + " to " + endPin);
                     Pin input, output;
                     if (startPin.IsOutput)
                     {
@@ -239,10 +250,11 @@ namespace Circuits
                 {
                     OutputLamp lamp = (OutputLamp)g;
                     lamp.Evaluate();
-                    Console.WriteLine("Output lamp at " + lamp.Left + "," + lamp.Top + " is " + (lamp.Evaluate() ? "ON" : "OFF"));
+                    //Console.WriteLine("Output lamp at " + lamp.Left + "," + lamp.Top + " is " + (lamp.Evaluate() ? "ON" : "OFF"));
+                    this.Invalidate();   // Redraw the form
                 }
             }
-            this.Invalidate();   // Redraw the form
+            
         }
 
         /// <summary>
@@ -271,9 +283,20 @@ namespace Circuits
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void toolStripButtonCompount_Click(object sender, EventArgs e)
+        private void toolStripButtonCompound_Click(object sender, EventArgs e)
         {
-            Compound newCompound = new Compound(0, 0);
+            newCompound = new Compound(this.Width, this.Height); // Create a new compound gate
+        }
+
+        /// <summary>
+        /// This will add the selected gate to the compound gate.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void toolStripButtonEndCompount_Click(object sender, EventArgs e)
+        {
+            newGate = newCompound; // Add the selected compound gate to its own gate
+            newCompound = null;    // Clear the new compound gate variable
         }
 
         /// <summary>
@@ -314,17 +337,6 @@ namespace Circuits
         }
 
         /// <summary>
-        /// This will add the selected gate to the compound gate.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void toolStripButtonEndCompount_Click(object sender, EventArgs e)
-        {
-            newGate = newCompound; // Add the selected compound gate to its own gate
-            newCompound = null;    // Clear the new compound gate variable
-        }
-
-        /// <summary>
         /// Handles events while the mouse button is pressed down.
         /// </summary>
         /// <param name="sender"></param>
@@ -356,12 +368,6 @@ namespace Circuits
             //Check if a gate is currently selected
             if (current != null)
             {
-                if(newCompound != null)
-                {
-                    //Add the selected gate to the compound gate
-                    newCompound.AddGate(current);
-                }
-
                 //Unselect the selected gate
                 current.Selected = false;
                 current = null;
@@ -377,6 +383,7 @@ namespace Circuits
             }
             else
             {
+                //Console.WriteLine(gatesList.Count);
                 // search for the first gate under the mouse position
                 foreach (Gate g in gatesList)
                 {
@@ -384,6 +391,19 @@ namespace Circuits
                     {
                         g.Selected = true;
                         current = g;
+
+                        // If a compound gate is being created, add the selected gate to the compound gate
+                        if (newCompound != null)
+                        {
+                            //Add the selected gate to the compound gate
+                            newCompound.AddGate(current);
+                            //Remove the selected gate from the gates list
+                            gatesList.Remove(current);
+                            current.Selected = false;
+                            current = null;
+                        }
+
+                        // Redraw the form
                         this.Invalidate();
                         break;
                     }

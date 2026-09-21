@@ -44,6 +44,25 @@ namespace Circuits
         /// </summary>
         protected const int GAP = 12;
 
+        public override bool Selected
+        {
+            get { return selected; }
+            set
+            { // Toggle the output status when the input source is clicked
+                if (value)
+                {
+                    if (outputStatus)
+                    {
+                        outputStatus = false;
+                    }
+                    else if (outputStatus == false)
+                    {
+                        outputStatus = true;
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// Initialises the object to the specified coordinates and adds an output pin.
         /// </summary>
@@ -68,20 +87,6 @@ namespace Circuits
                 p.Draw(paper);
             }
 
-            // Toggle the output status when the input source is clicked
-            if (Selected)
-            {
-                if (outputStatus)
-                {
-                    outputStatus = false;
-                }
-                else if (outputStatus == false)
-                {
-                    outputStatus = true;
-                }
-            }
-
-            
             // Draw the output status of the input source
             if (outputStatus)
             {
@@ -114,6 +119,7 @@ namespace Circuits
         /// <returns></returns>
         public override bool Evaluate()
         {
+
             Console.WriteLine("Input Source Evaluated: " + outputStatus);
             return (outputStatus);
             

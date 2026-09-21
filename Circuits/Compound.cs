@@ -12,7 +12,53 @@ namespace Circuits
         /// <summary>
         /// A list of gates that make up the compound gate.
         /// </summary>
-        List<Gate> comp_Gates = new List<Gate>();
+        protected List<Gate> compGatesList = new List<Gate>();
+
+        /// <summary>
+        /// Gets and sets the left coordinate of the compound gate.
+        /// </summary>
+        public override int Left
+        {
+            get { return left; }
+            set { left = value; }
+        }
+
+        /// <summary>
+        /// Gets and sets the top coordinate of the compound gate.
+        /// </summary>
+        public override int Top
+        {
+            get { return top; }
+            set { top = value; }
+        }
+
+        /// <summary>
+        /// Gets and sets the selected property for clicking on all of the gates in the compound list
+        /// </summary>
+        public override bool Selected
+        {
+            get { return selected; }
+            set
+            {
+                if (selected != value)
+                {
+                    selected = value;
+                    foreach (Gate g in CompGatesList)
+                    {
+                        g.Selected = value;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets and sets the list of gates that make up the compound gate.
+        /// </summary>
+        public List<Gate> CompGatesList
+        {
+            get { return compGatesList; }
+            set { compGatesList = value; }
+        }
 
         /// <summary>
         /// Initialises the object to the specified coordinates and adds an input pin and an output pin.
@@ -31,7 +77,20 @@ namespace Circuits
         /// <param name="g"></param>
         public void AddGate(Gate g)
         {
-            comp_Gates.Add(g);
+            // Add the gate to the list of gates that make up the compound gate
+            CompGatesList.Add(g);
+
+            // Update the position of the compound gate to encompass the new gate
+            if (g.Left < Left)
+            {
+                Left = g.Left;
+            }
+            
+            if(g.Top < Top)
+            {
+                Top = g.Top;
+            }
+
         }
 
         /// <summary>
@@ -41,10 +100,32 @@ namespace Circuits
         public override void Draw(Graphics paper)
         {
             // Draw the gates that make up the compound gate
-            foreach (Gate g in comp_Gates)
+            foreach (Gate g in CompGatesList)
             {
                 g.Draw(paper);
             }
+        }
+
+        /// <summary>
+        /// Override mouse hit testing so clicks on any child gate select the compound gate
+        /// </summary>
+        public override bool IsMouseOn(int x, int y)
+        {
+            // First check if the point is inside any child gate
+            foreach (Gate g in CompGatesList)
+            {
+                if (g.Left <= x && x < g.Left + WIDTH && g.Top <= y && y < g.Top + HEIGHT)
+                {
+                    if (Selected)
+                        Selected = false;
+                    else
+                        Selected = true;
+                    return true;
+                }
+            }
+
+            // Default back to the base implementation if no child gate was hit
+            return base.IsMouseOn(x, y);
         }
 
         /// <summary>
@@ -56,9 +137,10 @@ namespace Circuits
             // Need to clone wires as well
 
             Compound newCompound = new Compound(Left, Top);
-            foreach (Gate g in comp_Gates)
+            foreach (Gate g in CompGatesList)
             {
-                newCompound.AddGate(g.Clone());
+                Gate cloned = g.Clone();
+                newCompound.AddGate(cloned);
             }
             return newCompound;
         }
@@ -73,13 +155,14 @@ namespace Circuits
             // Calculate the offset for each gate in the compound gate
             int offsetX = x - Left;
             int offsetY = y - Top;
+            // Update the position of the compound gate
+            base.MoveTo(x, y);
             // Move each gate in the compound gate by the offset
-            foreach (Gate g in comp_Gates)
+            foreach (Gate g in CompGatesList)
             {
                 g.MoveTo(g.Left + offsetX, g.Top + offsetY);
             }
-            // Update the position of the compound gate
-            base.MoveTo(x, y);
+
         }
 
         /// <summary>
@@ -89,7 +172,7 @@ namespace Circuits
         public override bool Evaluate()
         {
             // Evaluate the output of the compound gate based on the outputs of its constituent gates
-            foreach (Gate g in comp_Gates)
+            foreach (Gate g in CompGatesList)
             {
                 if (!g.Evaluate())
                 {
