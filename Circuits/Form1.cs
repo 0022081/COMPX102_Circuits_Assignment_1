@@ -27,12 +27,18 @@ namespace Circuits
     //        to a subclass
  
     //2.	What is the advantage of making a method abstract in the superclass rather than just writing a virtual method with no code in the body of the method? Is there any disadvantage to an abstract method? 
-    //      - 
+    //      - Making a method in the superclass abstract over virtual enforces that each subclass has to have a method that is different from the superclass. If the class is 
+    //        is only virtual then the subclass does not have to inherit the method at all and can also just inherit the exact superclass method. 
+    //      - Having an abstract method in a superclass does make it harder for usage of inherited class in other less related areas of code and subclasses. It also means that adding or chaning any abstract methods
+    //        in the superclass after the creation of subclasses breaks the compilation of all the subclasses as these are strictly tied to the superclass. 
  
     //3.	If a class has an abstract method in it, does the class have to be abstract? 
+    //      - Yes if the class has an abstract method in it the class has to be abstract. 
  
     //4.	What would happen in your program if one of the gates added to your Compound Gate is another Compound Gate? Is your design robust enough to cope with this situation?
-    
+    //      - My program uses a recursive seaching method for pins and selection for compound gates, thus if compound gates are inside other compound gates it will seach for a default gate class like AND, NOT, OR
+    //        then it will perform its selected or if mouse is on pin methods.
+
     public partial class Form1 : Form
     {
         /// <summary>
@@ -101,29 +107,41 @@ namespace Circuits
         /// <returns>The pin that has been selected</returns>
         public Pin findPin(int x, int y)
         {
+            // Search gates and their child gates recursively for a pin at (x,y)
             foreach (Gate g in gatesList)
             {
-                // If this gate is a compound, also search the pins of its child gates
-                Compound comp = g as Compound;
-                if (comp != null)
-                {
-                    foreach (Gate child in comp.CompGatesList)
-                    {
-                        foreach (Pin p in child.Pins)
-                        {
-                            if (p.isMouseOn(x, y))
-                                return p;
-                        }
-                    }
-                }
+                Pin found = findPinInGate(g, x, y);
+                if (found != null)
+                    return found;
+            }
+            return null;
+        }
 
-                // Search the pins belonging to the (possibly compound) gate itself
-                foreach (Pin p in g.Pins)
+        /// <summary>
+        /// Recursively search the provided gate (and any child gates if it's a Compound)
+        /// for a pin close to (x,y).
+        /// </summary>
+        private Pin findPinInGate(Gate g, int x, int y)
+        {
+            // Check pins directly on this gate first
+            foreach (Pin p in g.Pins)
+            {
+                if (p.isMouseOn(x, y))
+                    return p;
+            }
+
+            // If this gate is a compound, recurse into its children
+            Compound comp = g as Compound;
+            if (comp != null)
+            {
+                foreach (Gate child in comp.CompGatesList)
                 {
-                    if (p.isMouseOn(x, y))
-                        return p;
+                    Pin found = findPinInGate(child, x, y);
+                    if (found != null)
+                        return found;
                 }
             }
+
             return null;
         }
 

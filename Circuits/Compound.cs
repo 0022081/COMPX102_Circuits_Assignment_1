@@ -132,21 +132,46 @@ namespace Circuits
         /// </summary>
         public override bool IsMouseOn(int x, int y)
         {
-            // First check if the point is inside any child gate
-            foreach (Gate g in CompGatesList)
+            // If the point hits any child gate (recursively), toggle this compound's selection
+            if (ContainsPoint(x, y))
             {
-                if (g.Left <= x && x < g.Left + WIDTH && g.Top <= y && y < g.Top + HEIGHT)
-                {
-                    if (Selected)
-                        Selected = false;
-                    else
-                        Selected = true;
-                    return true;
-                }
+                Selected = !Selected;
+                return true;
             }
 
             // Default back to the base implementation if no child gate was hit
             return base.IsMouseOn(x, y);
+        }
+
+        /// <summary>
+        /// Returns true when the given point lies inside any gate that is
+        /// contained by this compound (recursively). Does not change selection.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        public bool ContainsPoint(int x, int y)
+        {
+            // Check for each gate inside first compound if clicked on
+            foreach (Gate g in CompGatesList)
+            {
+                // If compound inside compound gate then check child gates recursivley (loop through compounds until finds default gates then check for if selected)
+                Compound childComp = g as Compound;
+                // If found compound gate inside compound gate recursively call func. again
+                if (childComp != null)
+                {
+                    
+                    if (childComp.ContainsPoint(x, y))
+                        return true;
+                }
+                // If gate == default gate type check if clicked on
+                else
+                {
+                    if (g.Left <= x && x < g.Left + WIDTH && g.Top <= y && y < g.Top + HEIGHT)
+                        return true;
+                }
+            }
+            return false;
         }
 
         /// <summary>
