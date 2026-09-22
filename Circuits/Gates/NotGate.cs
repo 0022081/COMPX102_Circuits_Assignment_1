@@ -18,7 +18,6 @@ namespace Circuits
         {
             //Add the input pin to the gate
             pins.Add(new Pin(this, true, 20));
-            pins.Add(new Pin(this, true, 20));
             //Add the output pin to the gate
             pins.Add(new Pin(this, false, 20));
             //move the gate and the pins to the position passed in
@@ -39,7 +38,7 @@ namespace Circuits
 
             //Now draw the main part of the gate after setting which image to use based on whether the gate is selected or not
 
-            if (selected)
+            if (Selected)
             {
                 paper.DrawImage(Properties.Resources.NotGateRed, Left, Top);
             }
@@ -50,15 +49,40 @@ namespace Circuits
         }
 
         /// <summary>
+        /// Clones the input source by creating a new instance at the same coordinates.
+        /// </summary>
+        /// <returns></returns>
+        public override Gate Clone()
+        {
+            NotGate newNotGate = new NotGate(Left, Top);
+            return newNotGate;
+        }
+
+        /// <summary>
         /// Evaluates the output of the NOT gate based on the input pin's value.
         /// </summary>
         /// <returns></returns>
         public override bool Evaluate()
         {
-            // Get the gate connected to the input pin
-            Gate inputGate = pins[0].InputWire.FromPin.Owner;
-            // Return the negation of the input gate's evaluation
-            return !inputGate.Evaluate();
+            try
+            {
+                // Check if the input pin is connected to a wire
+                if (pins[0].InputWire == null)
+                {
+                    throw new Exception("Input pin is not connected to a wire.");
+                }
+                else // Pins connected so return the NOT of the input gate's evaluation
+                {
+                    Gate inputGate = pins[0].InputWire.FromPin.Owner;
+                    return !inputGate.Evaluate();
+                }
+
+            }
+            catch (Exception ex)    // Catch any exceptions that occur during evaluation and print an error message
+            {
+                Console.WriteLine($"Error evaluating NOT gate: {ex.Message}");
+                return false;
+            }    
         }
 
         /// <summary>
@@ -71,11 +95,9 @@ namespace Circuits
             base.MoveTo(x, y);
             // must move the pins too
             pins[0].X = x - GAP;
-            pins[0].Y = y + GAP;
-            pins[1].X = x - GAP;
-            pins[1].Y = y + HEIGHT - GAP;
-            pins[2].X = x + WIDTH + GAP;
-            pins[2].Y = y + HEIGHT / 2;
+            pins[0].Y = y + HEIGHT / 2;
+            pins[1].X = x + WIDTH + GAP;
+            pins[1].Y = y + HEIGHT / 2;
         }
     }
 }

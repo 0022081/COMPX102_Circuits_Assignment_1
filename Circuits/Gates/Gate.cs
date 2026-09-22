@@ -43,7 +43,7 @@ namespace Circuits
         /// <summary>
         /// Gets and sets whether the fate is selected or not.
         /// </summary>
-        public bool Selected
+        public virtual bool Selected
         {
             get { return selected; }
             set { selected = value; }
@@ -52,17 +52,19 @@ namespace Circuits
         /// <summary>
         /// Gets the left hand edge of the gate.
         /// </summary>
-        public int Left
+        public virtual int Left
         {
             get { return left; }
+            set { }
         }
 
         /// <summary>
         /// Gets the top edge of the gate.
         /// </summary>
-        public int Top
+        public virtual int Top
         {
             get { return top; }
+            set { }
         }
 
         /// <summary>
@@ -79,13 +81,26 @@ namespace Circuits
         /// <param name="x">The x position of the mouse click</param>
         /// <param name="y">The y position of the mouse click</param>
         /// <returns>True if the mouse click position is inside the gate</returns>
-        public bool IsMouseOn(int x, int y)
+        public virtual bool IsMouseOn(int x, int y)
         {
             if (left <= x && x < left + WIDTH
                 && top <= y && y < top + HEIGHT)
+            {
+                if (Selected)
+                {
+                    Selected = false;
+                }
+                else
+                {
+                    Selected = true;
+                }
                 return true;
+            }
             else
+            {
                 return false;
+            }
+
         }
 
         /// <summary>
@@ -99,6 +114,11 @@ namespace Circuits
         /// </summary>
         /// <returns></returns>
         public abstract bool Evaluate();
+
+        /// <summary>
+        /// Clone the currently selected gate (make exact copy)
+        /// </summary>
+        public abstract Gate Clone();
 
         /// <summary>
         /// Moves the gate to the position specified.

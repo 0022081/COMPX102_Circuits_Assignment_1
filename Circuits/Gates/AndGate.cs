@@ -44,7 +44,7 @@ namespace Circuits
 
             //Now draw the main part of the gate after setting which image to use based on whether the gate is selected or not
 
-            if (selected)
+            if (Selected)
             {
                 paper.DrawImage(Properties.Resources.AndGateRed, Left, Top);
             }
@@ -58,6 +58,15 @@ namespace Circuits
             //paper.DrawImage(Properties.Resources.AndGate, Left, Top);
 
 
+        }
+
+        /// <summary>
+        /// Clones the gate to create a new instance of the gate at the same position.
+        /// </summary>
+        public override Gate Clone()
+        {
+            AndGate newGate = new AndGate(Left, Top);
+            return newGate;
         }
 
         /// <summary>
@@ -78,7 +87,14 @@ namespace Circuits
                 {
                     Gate gateA = pins[0].InputWire.FromPin.Owner;
                     Gate gateB = pins[1].InputWire.FromPin.Owner;
-                    return gateA.Evaluate() && gateB.Evaluate();
+                    if(gateA.Evaluate() == false || gateB.Evaluate() == false)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        return true;
+                    }
                 }
 
             }

@@ -55,6 +55,15 @@ namespace Circuits
         }
 
         /// <summary>
+        /// Clones the input source by creating a new instance at the same coordinates.
+        /// </summary>
+        public override Gate Clone()
+        {
+            OutputLamp newOutputLamp = new OutputLamp(Left, Top);
+            return newOutputLamp;
+        }
+
+        /// <summary>
         /// Evaluates the output lamp's status based on the input gate's evaluation.
         /// </summary>
         /// <returns></returns>

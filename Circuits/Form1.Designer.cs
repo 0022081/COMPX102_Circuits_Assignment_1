@@ -33,10 +33,13 @@
             this.toolStripButtonAnd = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonNot = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonOr = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonPad = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonInput = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonOutput = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonEvaluate = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonClone = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonCompound = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonEndCompount = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -48,14 +51,17 @@
             this.toolStripButtonAnd,
             this.toolStripButtonNot,
             this.toolStripButtonOr,
-            this.toolStripButton1,
+            this.toolStripButtonPad,
             this.toolStripButtonInput,
             this.toolStripButtonOutput,
-            this.toolStripButton2});
+            this.toolStripButtonEvaluate,
+            this.toolStripButtonClone,
+            this.toolStripButtonCompound,
+            this.toolStripButtonEndCompount});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Padding = new System.Windows.Forms.Padding(0, 0, 3, 0);
-            this.toolStrip1.Size = new System.Drawing.Size(1512, 38);
+            this.toolStrip1.Size = new System.Drawing.Size(1512, 33);
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -65,8 +71,8 @@
             this.toolStripButtonAnd.Image = global::Circuits.Properties.Resources.AndIcon;
             this.toolStripButtonAnd.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonAnd.Name = "toolStripButtonAnd";
-            this.toolStripButtonAnd.Size = new System.Drawing.Size(34, 33);
-            this.toolStripButtonAnd.Text = "toolStripButton1";
+            this.toolStripButtonAnd.Size = new System.Drawing.Size(34, 28);
+            this.toolStripButtonAnd.Text = "AND Gate";
             this.toolStripButtonAnd.Click += new System.EventHandler(this.toolStripButtonAnd_Click);
             // 
             // toolStripButtonNot
@@ -75,8 +81,8 @@
             this.toolStripButtonNot.Image = global::Circuits.Properties.Resources.NotGate;
             this.toolStripButtonNot.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonNot.Name = "toolStripButtonNot";
-            this.toolStripButtonNot.Size = new System.Drawing.Size(34, 33);
-            this.toolStripButtonNot.Text = "toolStripButton1";
+            this.toolStripButtonNot.Size = new System.Drawing.Size(34, 28);
+            this.toolStripButtonNot.Text = "NOT Gate";
             this.toolStripButtonNot.Click += new System.EventHandler(this.toolStripButtonNot_Click);
             // 
             // toolStripButtonOr
@@ -85,19 +91,19 @@
             this.toolStripButtonOr.Image = global::Circuits.Properties.Resources.OrGate;
             this.toolStripButtonOr.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonOr.Name = "toolStripButtonOr";
-            this.toolStripButtonOr.Size = new System.Drawing.Size(34, 33);
-            this.toolStripButtonOr.Text = "toolStripButton2";
+            this.toolStripButtonOr.Size = new System.Drawing.Size(34, 28);
+            this.toolStripButtonOr.Text = "OR Gate";
             this.toolStripButtonOr.Click += new System.EventHandler(this.toolStripButtonOr_Click);
             // 
-            // toolStripButton1
+            // toolStripButtonPad
             // 
-            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(34, 33);
-            this.toolStripButton1.Text = "toolStripButton1";
-            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
+            this.toolStripButtonPad.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonPad.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonPad.Image")));
+            this.toolStripButtonPad.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonPad.Name = "toolStripButtonPad";
+            this.toolStripButtonPad.Size = new System.Drawing.Size(34, 28);
+            this.toolStripButtonPad.Text = "Pad Gate";
+            this.toolStripButtonPad.Click += new System.EventHandler(this.toolStripButtonPad_Click);
             // 
             // toolStripButtonInput
             // 
@@ -105,8 +111,8 @@
             this.toolStripButtonInput.Image = global::Circuits.Properties.Resources.InputIcon;
             this.toolStripButtonInput.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonInput.Name = "toolStripButtonInput";
-            this.toolStripButtonInput.Size = new System.Drawing.Size(34, 33);
-            this.toolStripButtonInput.Text = "toolStripButton2";
+            this.toolStripButtonInput.Size = new System.Drawing.Size(34, 28);
+            this.toolStripButtonInput.Text = "Input Gate";
             this.toolStripButtonInput.Click += new System.EventHandler(this.toolStripButtonInput_Click);
             // 
             // toolStripButtonOutput
@@ -115,19 +121,49 @@
             this.toolStripButtonOutput.Image = global::Circuits.Properties.Resources.OutputIcon;
             this.toolStripButtonOutput.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonOutput.Name = "toolStripButtonOutput";
-            this.toolStripButtonOutput.Size = new System.Drawing.Size(34, 33);
-            this.toolStripButtonOutput.Text = "toolStripButton2";
+            this.toolStripButtonOutput.Size = new System.Drawing.Size(34, 28);
+            this.toolStripButtonOutput.Text = "Output Gate";
             this.toolStripButtonOutput.Click += new System.EventHandler(this.toolStripButtonOutput_Click);
             // 
-            // toolStripButton2
+            // toolStripButtonEvaluate
             // 
-            this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton2.Image = global::Circuits.Properties.Resources.EvaluateIcon;
-            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton2.Name = "toolStripButton2";
-            this.toolStripButton2.Size = new System.Drawing.Size(34, 33);
-            this.toolStripButton2.Text = "toolStripButton2";
-            this.toolStripButton2.Click += new System.EventHandler(this.toolStripButton2_Click);
+            this.toolStripButtonEvaluate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonEvaluate.Image = global::Circuits.Properties.Resources.EvaluateIcon;
+            this.toolStripButtonEvaluate.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonEvaluate.Name = "toolStripButtonEvaluate";
+            this.toolStripButtonEvaluate.Size = new System.Drawing.Size(34, 28);
+            this.toolStripButtonEvaluate.Text = "Evaluate";
+            this.toolStripButtonEvaluate.Click += new System.EventHandler(this.toolStripButtonEvaluate_Click);
+            // 
+            // toolStripButtonClone
+            // 
+            this.toolStripButtonClone.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonClone.Image = global::Circuits.Properties.Resources.CopyIcon;
+            this.toolStripButtonClone.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonClone.Name = "toolStripButtonClone";
+            this.toolStripButtonClone.Size = new System.Drawing.Size(34, 28);
+            this.toolStripButtonClone.Text = "Clone";
+            this.toolStripButtonClone.Click += new System.EventHandler(this.toolStripButtonClone_Click);
+            // 
+            // toolStripButtonCompound
+            // 
+            this.toolStripButtonCompound.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonCompound.Image = global::Circuits.Properties.Resources.StartCompoundIcon;
+            this.toolStripButtonCompound.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonCompound.Name = "toolStripButtonCompound";
+            this.toolStripButtonCompound.Size = new System.Drawing.Size(34, 28);
+            this.toolStripButtonCompound.Text = "Start Group";
+            this.toolStripButtonCompound.Click += new System.EventHandler(this.toolStripButtonCompound_Click);
+            // 
+            // toolStripButtonEndCompount
+            // 
+            this.toolStripButtonEndCompount.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonEndCompount.Image = global::Circuits.Properties.Resources.EndCompoundIcon;
+            this.toolStripButtonEndCompount.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonEndCompount.Name = "toolStripButtonEndCompount";
+            this.toolStripButtonEndCompount.Size = new System.Drawing.Size(34, 28);
+            this.toolStripButtonEndCompount.Text = "End Group";
+            this.toolStripButtonEndCompount.Click += new System.EventHandler(this.toolStripButtonEndCompount_Click);
             // 
             // Form1
             // 
@@ -158,10 +194,13 @@
         private System.Windows.Forms.ToolStripButton toolStripButtonAnd;
         private System.Windows.Forms.ToolStripButton toolStripButtonNot;
         private System.Windows.Forms.ToolStripButton toolStripButtonOr;
-        private System.Windows.Forms.ToolStripButton toolStripButton1;
+        private System.Windows.Forms.ToolStripButton toolStripButtonPad;
         private System.Windows.Forms.ToolStripButton toolStripButtonInput;
         private System.Windows.Forms.ToolStripButton toolStripButtonOutput;
-        private System.Windows.Forms.ToolStripButton toolStripButton2;
+        private System.Windows.Forms.ToolStripButton toolStripButtonEvaluate;
+        private System.Windows.Forms.ToolStripButton toolStripButtonClone;
+        private System.Windows.Forms.ToolStripButton toolStripButtonCompound;
+        private System.Windows.Forms.ToolStripButton toolStripButtonEndCompount;
     }
 }
 

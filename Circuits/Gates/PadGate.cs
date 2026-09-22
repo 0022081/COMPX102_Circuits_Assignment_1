@@ -9,6 +9,32 @@ namespace Circuits
 {
     public class PadGate : Gate
     {
+        /// <summary>
+        /// The width of the PadGate.
+        /// </summary>
+        protected const int WIDTH = 25;
+        /// <summary>
+        /// The height of the PadGate.
+        /// </summary>
+        protected const int HEIGHT = 25;
+        /// <summary>
+        /// The width of the icon within the PadGate.
+        /// </summary>
+        protected const int ICON_WIDTH = 12;
+        /// <summary>
+        /// The height of the icon within the PadGate.
+        /// </summary>
+        protected const int ICON_HEIGHT = 12;
+        /// <summary>
+        /// The offset for the icon within the PadGate.
+        /// </summary>
+        protected const int ICON_OFFSET = 6;
+
+        /// <summary>
+        /// Initialises the object to the specified coordinates and adds an input pin and an output pin.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
         public PadGate(int x, int y) : base(x, y)
         {
             //Add the input pin to the gate
@@ -33,11 +59,11 @@ namespace Circuits
 
             //Now draw the main part of the gate after setting which image to use based on whether the gate is selected or not
 
-            if (selected)
+            if (Selected)
             {
                 //Draw small rectangle for the PadGate instead of image
-
-                paper.FillRectangle(Brushes.Red, Left, Top, WIDTH, HEIGHT);
+                paper.FillRectangle(Brushes.Black, Left, Top, WIDTH, HEIGHT);
+                paper.FillRectangle(Brushes.Red, Left + ICON_OFFSET, Top + ICON_OFFSET, ICON_WIDTH, ICON_HEIGHT);
             }
             else
             {
@@ -46,15 +72,38 @@ namespace Circuits
         }
 
         /// <summary>
+        /// Clones the input source by creating a new instance at the same coordinates.
+        /// </summary>
+        public override Gate Clone()
+        {
+            PadGate newPadGate = new PadGate(Left, Top);
+            return newPadGate;
+        }
+
+        /// <summary>
         /// Evaluates the gate and returns the result of the evaluation.
         /// </summary>
         /// <returns></returns>
         public override bool Evaluate()
         {
-            // Get the gate connected to the input pin
-            Gate inputGate = pins[0].InputWire.FromPin.Owner;
-            // Return the evaluation of the input gate
-            return inputGate.Evaluate();
+            try
+            {
+                if (pins[0].InputWire == null)   //Throw exception if the input wire is not connected to another gate
+                {
+                    throw new Exception("Cannot clone PadGate with no input wire connected.");
+                }
+                else//If the input wire is connected, create a new instance of PadGate at the same coordinates
+                {
+                    Gate inputGate1 = pins[0].InputWire.FromPin.Owner;
+                    // Evaluate the inputs and return the OR result
+                    return inputGate1.Evaluate();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error cloning PadGate: {ex.Message}");
+                return false;
+            }
         }
 
         /// <summary>

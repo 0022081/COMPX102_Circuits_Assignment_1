@@ -9,10 +9,59 @@ namespace Circuits
 {
     public class InputSource : Gate
     {
+        /// <summary>
+        /// Set the output status of the input source. True for high, false for low.
+        /// </summary>
         protected bool outputStatus = false;
 
+        /// <summary>
+        /// The width of the input source.
+        /// </summary>
         protected const int WIDTH = 20;
+
+        /// <summary>
+        /// The height of the input source.
+        /// </summary>
         protected const int HEIGHT = 20;
+
+        /// <summary>
+        /// The width of the icon within the input source.
+        /// </summary>
+        protected const int ICON_WIDTH = 8;
+
+        /// <summary>
+        /// The height of the icon within the input source.
+        /// </summary>
+        protected const int ICON_HEIGHT = 8;
+
+        /// <summary>
+        /// The offset for the icon within the input source.
+        /// </summary>
+        protected const int ICON_OFFSET = 6;
+
+        /// <summary>
+        /// The gap between the input source and its output pin.
+        /// </summary>
+        protected const int GAP = 12;
+
+        public override bool Selected
+        {
+            get { return selected; }
+            set
+            { // Toggle the output status when the input source is clicked
+                if (value)
+                {
+                    if (outputStatus)
+                    {
+                        outputStatus = false;
+                    }
+                    else if (outputStatus == false)
+                    {
+                        outputStatus = true;
+                    }
+                }
+            }
+        }
 
         /// <summary>
         /// Initialises the object to the specified coordinates and adds an output pin.
@@ -38,32 +87,30 @@ namespace Circuits
                 p.Draw(paper);
             }
 
-            // Toggle the output status when the input source is clicked
-            if (selected)
-            {
-                if (outputStatus)
-                {
-                    outputStatus = false;
-                }
-                else if (outputStatus == false)
-                {
-                    outputStatus = true;
-                }
-            }
-
-            // Draw the main part of the input source
-            paper.DrawImage(Properties.Resources.InputIcon, Left, Top);
             // Draw the output status of the input source
             if (outputStatus)
             {
-                paper.FillRectangle(Brushes.Red, Left, Top, WIDTH, HEIGHT);
+                // Draw the main part of the input source
+                paper.DrawImage(Properties.Resources.InputIcon, Left, Top);
+                // Draw green filled rectangle
+                paper.FillRectangle(Brushes.GreenYellow, Left + (ICON_OFFSET / 2), Top + ICON_OFFSET, ICON_WIDTH, ICON_HEIGHT);
             }
             else
             {
-                paper.FillRectangle(Brushes.Black, Left, Top, WIDTH, HEIGHT);
-                //Draw black filled rectangle
-
+                // Draw the main part of the input source
+                paper.DrawImage(Properties.Resources.InputIcon, Left, Top);
+                // Draw black filled rectangle
+                paper.FillRectangle(Brushes.Black, Left + (ICON_OFFSET / 2), Top + ICON_OFFSET, ICON_WIDTH, ICON_HEIGHT);
             }
+        }
+
+        /// <summary>
+        /// Clones the input source by creating a new instance at the same coordinates.
+        /// </summary>
+        public override Gate Clone()
+        {
+            InputSource newInputSource = new InputSource(Left, Top);
+            return newInputSource;
         }
 
         /// <summary>
@@ -72,7 +119,10 @@ namespace Circuits
         /// <returns></returns>
         public override bool Evaluate()
         {
+
+            Console.WriteLine("Input Source Evaluated: " + outputStatus);
             return (outputStatus);
+            
         }
 
         /// <summary>
