@@ -20,8 +20,14 @@ namespace Circuits
     /// 
 
     //1.	Is it a better idea to fully document the Gate class or the AndGate subclass? Can you inherit comments? 
+    //      - It is better to fully document the Gate class as this is the super class and thus any of the methods, properties and instance variables used
+    //        in the AndGate subclass will automatically inherit the documentation. If the AndGate subclass was fully documented instead then the Gate super class
+    //        would not be documented and any of the other subclasses of the Gate class would not either. 
+    //      - Yes you can inherit comments in the way that documentation of summary's will be inherited in the variables, methods and properties from a super class
+    //        to a subclass
  
     //2.	What is the advantage of making a method abstract in the superclass rather than just writing a virtual method with no code in the body of the method? Is there any disadvantage to an abstract method? 
+    //      - 
  
     //3.	If a class has an abstract method in it, does the class have to be abstract? 
  
@@ -51,9 +57,19 @@ namespace Circuits
         protected List<Gate> gatesList = new List<Gate>();
 
         /// <summary>
+        /// Holds any selected gates being added to new compound that need to removed from gatesList
+        /// </summary>
+        protected List<Gate> removeGatesList = new List<Gate>();
+
+        /// <summary>
         /// The set of connector wires in the circuit
         /// </summary>
         protected List<Wire> wiresList = new List<Wire>();
+
+        /// <summary>
+        /// List of the wires inside new compound gate to move
+        /// </summary>
+        protected List<Wire> wiresToMove = new List<Wire>();
 
         /// <summary>
         /// The currently selected gate, or null if no gate is selected.
@@ -87,6 +103,21 @@ namespace Circuits
         {
             foreach (Gate g in gatesList)
             {
+                // If this gate is a compound, also search the pins of its child gates
+                Compound comp = g as Compound;
+                if (comp != null)
+                {
+                    foreach (Gate child in comp.CompGatesList)
+                    {
+                        foreach (Pin p in child.Pins)
+                        {
+                            if (p.isMouseOn(x, y))
+                                return p;
+                        }
+                    }
+                }
+
+                // Search the pins belonging to the (possibly compound) gate itself
                 foreach (Pin p in g.Pins)
                 {
                     if (p.isMouseOn(x, y))
@@ -296,6 +327,10 @@ namespace Circuits
         private void toolStripButtonEndCompount_Click(object sender, EventArgs e)
         {
             newGate = newCompound; // Add the selected compound gate to its own gate
+            foreach(Gate g in removeGatesList)
+            {
+                gatesList.Remove(g);
+            }
             newCompound = null;    // Clear the new compound gate variable
         }
 
@@ -398,17 +433,14 @@ namespace Circuits
                             //Add the selected gate to the compound gate
                             newCompound.AddGate(current);
                             // Move any wires that now lie entirely inside the compound
-                            var wiresToMove = wiresList.Where(w => newCompound.CompGatesList.Contains(w.FromPin.Owner)
-                                                                    && newCompound.CompGatesList.Contains(w.ToPin.Owner))
-                                                      .ToList();
-                            foreach (var w in wiresToMove)
+                            wiresToMove = wiresList.Where(w => newCompound.CompGatesList.Contains(w.FromPin.Owner) && newCompound.CompGatesList.Contains(w.ToPin.Owner)).ToList();
+                            foreach (Wire w in wiresToMove)
                             {
                                 wiresList.Remove(w);
                                 newCompound.CompWiresList.Add(w);
                             }
                             //Remove the selected gate from the gates list
-                            gatesList.Remove(current);
-                            current.Selected = false;
+                            removeGatesList.Add(current);
                             current = null;
                         }
 
