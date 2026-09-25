@@ -9,6 +9,7 @@ namespace Circuits
 {
     public class OrGate : Gate
     {
+        // Sets the gate offset for pins
         const int GAP_OFFSET = 12;
 
         /// <summary>
@@ -39,8 +40,7 @@ namespace Circuits
                 p.Draw(paper);
             }
 
-            //Now draw the main part of the gate after setting which image to use based on whether the gate is selected or not
-
+            // Draw the or gate based on whether selected or not
             if (Selected)
             {
                 paper.DrawImage(Properties.Resources.OrGateRed, Left, Top);
@@ -56,7 +56,7 @@ namespace Circuits
         /// </summary>
         public override Gate Clone()
         {
-            OrGate newOrGate = new OrGate(Left, Top);
+            OrGate newOrGate = new OrGate(Left, Top);   // create new clone on current gate
             return newOrGate;
         }
 

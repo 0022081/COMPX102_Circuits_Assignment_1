@@ -41,9 +41,7 @@ namespace Circuits
                 p.Draw(paper);
             }
 
-
-            //Now draw the main part of the gate after setting which image to use based on whether the gate is selected or not
-
+            // Draw gate based on whether selected or not
             if (Selected)
             {
                 paper.DrawImage(Properties.Resources.AndGateRed, Left, Top);
@@ -52,11 +50,10 @@ namespace Circuits
             {
                 paper.DrawImage(Properties.Resources.AndGate, Left, Top);
             }
-            //Note: You can also use the images that have been imported into the project if you wish,
-            //      using the code below.  You will need to space the pins out a bit more in the constructor.
-            //      There are provided images for the other gates and selected versions of the gates as well.
-            //paper.DrawImage(Properties.Resources.AndGate, Left, Top);
 
+            // Testing boxes for Top, Left pos
+            //Pen pen = new Pen(Color.Green);
+            //paper.DrawRectangle(pen, Left, Top, 20, 20);
 
         }
 
@@ -65,7 +62,7 @@ namespace Circuits
         /// </summary>
         public override Gate Clone()
         {
-            AndGate newGate = new AndGate(Left, Top);
+            AndGate newGate = new AndGate(Left, Top); // create new gate on current
             return newGate;
         }
 
@@ -87,7 +84,7 @@ namespace Circuits
                 {
                     Gate gateA = pins[0].InputWire.FromPin.Owner;
                     Gate gateB = pins[1].InputWire.FromPin.Owner;
-                    if(gateA.Evaluate() == false || gateB.Evaluate() == false)
+                    if(gateA.Evaluate() == false || gateB.Evaluate() == false)  // recursively check input pins
                     {
                         return false;
                     }
@@ -98,7 +95,7 @@ namespace Circuits
                 }
 
             }
-            catch (Exception ex)
+            catch (Exception ex)    // throw exception if any of the evaluation methods returns error
             {
                 Console.WriteLine($"Error evaluating AND gate: {ex.Message}");
                 return false;

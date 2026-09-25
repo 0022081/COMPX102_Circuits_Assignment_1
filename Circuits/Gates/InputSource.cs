@@ -44,21 +44,22 @@ namespace Circuits
         /// </summary>
         protected const int GAP = 12;
 
-        public override bool Selected
+        /// <summary>
+        /// Sets the output status of the gate
+        /// </summary>
+        public bool OutputStatus
         {
-            get { return selected; }
+            get { return outputStatus; }
             set
-            { // Toggle the output status when the input source is clicked
-                if (value)
+            {
+                if (outputStatus)
                 {
-                    if (outputStatus)
-                    {
-                        outputStatus = false;
-                    }
-                    else if (outputStatus == false)
-                    {
-                        outputStatus = true;
-                    }
+                    outputStatus = false;
+
+                }
+                else
+                {
+                    outputStatus = true;
                 }
             }
         }
@@ -109,6 +110,7 @@ namespace Circuits
         /// </summary>
         public override Gate Clone()
         {
+            //Console.WriteLine("Cloned input gate");
             InputSource newInputSource = new InputSource(Left, Top);
             return newInputSource;
         }
@@ -119,10 +121,8 @@ namespace Circuits
         /// <returns></returns>
         public override bool Evaluate()
         {
-
-            Console.WriteLine("Input Source Evaluated: " + outputStatus);
+            //Console.WriteLine("Input Source Evaluated: " + outputStatus);
             return (outputStatus);
-            
         }
 
         /// <summary>

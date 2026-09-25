@@ -22,26 +22,23 @@ namespace Circuits
         // length of the connector legs sticking out left and right
         protected const int GAP = 10;
 
+        // brush object for drawing gates when selected
         protected Brush selectedBrush = Brushes.Red;
+        // brush object for drawing - non selected
         protected Brush normalBrush = Brushes.LightGray;
 
-        /// <summary>
-        /// This is the list of all the pins of this gate.
-        /// An AND gate always has two input pins (0 and 1)
-        /// and one output pin (number 2).
-        /// </summary>
+        //This is the list of all the pins of this gate.
         protected List<Pin> pins = new List<Pin>();
+
         //Has the gate been selected
         protected bool selected = false;
 
         //Constructor ###################################################################
         protected Gate(int x, int y)
-        {
-
-        }
+        {}
 
         /// <summary>
-        /// Gets and sets whether the fate is selected or not.
+        /// Gets and sets whether the gate is selected or not.
         /// </summary>
         public virtual bool Selected
         {
@@ -83,6 +80,7 @@ namespace Circuits
         /// <returns>True if the mouse click position is inside the gate</returns>
         public virtual bool IsMouseOn(int x, int y)
         {
+            // If mouse within gate object toggle selected property
             if (left <= x && x < left + WIDTH
                 && top <= y && y < top + HEIGHT)
             {

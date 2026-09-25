@@ -99,7 +99,7 @@ namespace Circuits
         }
 
         /// <summary>
-        /// Finds the pin that is close to (x,y), or returns
+        /// Finds the pin that is close to mouse (x,y), or returns
         /// null if there are no pins close to the position.
         /// </summary>
         /// <param name="x"></param>
@@ -136,13 +136,36 @@ namespace Circuits
             {
                 foreach (Gate child in comp.CompGatesList)
                 {
-                    Pin found = findPinInGate(child, x, y);
-                    if (found != null)
-                        return found;
+                    Pin foundPin = findPinInGate(child, x, y);  // search for any pins close to (x,y)
+                    if (foundPin != null)
+                        return foundPin;
                 }
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// Recursivley search the provided gate (any any child gates inside a Compound) for input to toggle on/off
+        /// </summary>
+        /// <param name="g"></param>
+        public void ToggleInput(Gate g)
+        {
+            //
+            InputSource source = g as InputSource;
+            if (source != null)
+            {
+                source.OutputStatus = true;
+            }
+            
+            Compound comp = g as Compound;
+            if(comp != null)
+            {
+                foreach (Gate child in comp.CompGatesList)
+                {
+                    ToggleInput(child);
+                }
+            }
         }
 
         /// <summary>
@@ -157,7 +180,7 @@ namespace Circuits
                 //Console.WriteLine("wire from " + startPin + " to " + e.X + "," + e.Y);
                 currentX = e.X;
                 currentY = e.Y;
-                this.Invalidate();  // this will draw the line
+                this.Invalidate();
             }
             else if (startX >= 0 && startY >= 0 && current != null)
             {
@@ -287,12 +310,13 @@ namespace Circuits
         }
 
         /// <summary>
-        /// This will evaluate all of the output lamps in the circuit.
+        /// This will evaluate all of the output lamps in the circuit. Recursively calling all evaluate methods of any connected gates.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void toolStripButtonEvaluate_Click(object sender, EventArgs e)
         {
+            // For every output gate evaluate all connected gates status
             foreach (Gate g in gatesList)
             {
                 if (g is OutputLamp)
@@ -300,7 +324,7 @@ namespace Circuits
                     OutputLamp lamp = (OutputLamp)g;
                     lamp.Evaluate();
                     //Console.WriteLine("Output lamp at " + lamp.Left + "," + lamp.Top + " is " + (lamp.Evaluate() ? "ON" : "OFF"));
-                    this.Invalidate();   // Redraw the form
+                    this.Invalidate();
                 }
             }
             
@@ -316,7 +340,7 @@ namespace Circuits
             // If gate selected create new clone
             if (current != null)
             {
-                if (current.Selected)
+                if (current.Selected) // check a gate is selected before cloning
                 {
                     Gate newGate = current.Clone();   // Clone the selected gate
                     newGate.MoveTo(current.Left + 10, current.Top + 10);    // Move the new gate slightly to the right and down
@@ -334,7 +358,14 @@ namespace Circuits
         /// <param name="e"></param>
         private void toolStripButtonCompound_Click(object sender, EventArgs e)
         {
-            newCompound = new Compound(this.Width, this.Height); // Create a new compound gate
+            if (newCompound != null)
+            {// newCompound is already created don't create another one until it is closed first
+            }
+            else
+            {
+                newCompound = new Compound(this.Width, this.Height); // Create a new compound gate
+            }
+            
         }
 
         /// <summary>
@@ -347,7 +378,7 @@ namespace Circuits
             newGate = newCompound; // Add the selected compound gate to its own gate
             foreach(Gate g in removeGatesList)
             {
-                gatesList.Remove(g);
+                gatesList.Remove(g);// Remove any of the gates inside the comp gate from the main gates list
             }
             newCompound = null;    // Clear the new compound gate variable
         }
@@ -374,16 +405,16 @@ namespace Circuits
             {
                 w.Draw(e.Graphics);
             }
-
+            //Draw wire being added
             if (startPin != null)
             {
                 e.Graphics.DrawLine(Pens.White,
                     startPin.X, startPin.Y,
                     currentX, currentY);
             }
+            //Draw new gate being added
             if (newGate != null)
             {
-                // show the gate that we are dragging into the circuit
                 newGate.MoveTo(currentX, currentY);
                 newGate.Draw(e.Graphics);
             }
@@ -396,11 +427,13 @@ namespace Circuits
         /// <param name="e"></param>
         private void Form1_MouseDown(object sender, MouseEventArgs e)
         {
+            // If no gate currently being selected, assume trying to add wire
             if (current == null)
             {
-                // try to start adding a wire
+                // try to start adding a wire if close to pin
                 startPin = findPin(e.X, e.Y);
             }
+            // If on gate, assume trying to move
             else if (current.IsMouseOn(e.X, e.Y))
             {
                 // start dragging the current object around
@@ -437,6 +470,7 @@ namespace Circuits
             else
             {
                 //Console.WriteLine(gatesList.Count);
+
                 // search for the first gate under the mouse position
                 foreach (Gate g in gatesList)
                 {
@@ -444,6 +478,8 @@ namespace Circuits
                     {
                         g.Selected = true;
                         current = g;
+
+                        ToggleInput(g); // Toggle any input gates if selected
 
                         // If a compound gate is being created, add the selected gate to the compound gate
                         if (newCompound != null)
@@ -454,7 +490,7 @@ namespace Circuits
                             wiresToMove = wiresList.Where(w => newCompound.CompGatesList.Contains(w.FromPin.Owner) && newCompound.CompGatesList.Contains(w.ToPin.Owner)).ToList();
                             foreach (Wire w in wiresToMove)
                             {
-                                wiresList.Remove(w);
+                                wiresList.Remove(w); // Add to another remove list and then remove from wires list later
                                 newCompound.CompWiresList.Add(w);
                             }
                             //Remove the selected gate from the gates list

@@ -125,6 +125,10 @@ namespace Circuits
             {
                 w.Draw(paper);
             }
+
+            // Testing box for Top Left pos
+            //Pen pen = new Pen(Color.Red);
+            //paper.DrawRectangle(pen, Left, Top, 20, 20);
         }
 
         /// <summary>
@@ -190,10 +194,11 @@ namespace Circuits
             // First clone gates and build pin mapping (assumes Clone creates pins in same order)
             foreach (Gate g in CompGatesList)
             {
+                // Clone main gates
                 Gate cloned = g.Clone();
                 newCompound.AddGate(cloned);
 
-                //##
+                // Create dictionary of gatemap with main gate
                 gateMap[g] = cloned;
                 // map pins by index
                 for (int i = 0; i < g.Pins.Count && i < cloned.Pins.Count; i++)
@@ -207,6 +212,7 @@ namespace Circuits
             {
                 Pin origFrom = w.FromPin;
                 Pin origTo = w.ToPin;
+                // If wire is inside map from one pin to another pine then clone that wire
                 if (pinMap.ContainsKey(origFrom) && pinMap.ContainsKey(origTo))
                 {
                     Pin clonedFrom = pinMap[origFrom];
@@ -217,7 +223,6 @@ namespace Circuits
                     newCompound.CompWiresList.Add(clonedWire);
                 }
             }
-            //##
             return newCompound;
         }
 

@@ -9,9 +9,12 @@ namespace Circuits
 {
     public class OutputLamp : Gate
     {
+        // Sets the input status of the lamp (whether to light up or not)
         protected bool inputStatus = false;
 
+        // Sets the width of the gate
         protected const int WIDTH = 20;
+        //Sets the height of the gate
         protected const int HEIGHT = 20;
 
         /// <summary>
@@ -69,9 +72,18 @@ namespace Circuits
         /// <returns></returns>
         public override bool Evaluate()
         {
-            Gate gateA = pins[0].InputWire.FromPin.Owner;
-            inputStatus = gateA.Evaluate(); // Set output status based on the input gate's evaluation
-            return inputStatus;
+            try
+            {
+                Gate gateA = pins[0].InputWire.FromPin.Owner;
+                inputStatus = gateA.Evaluate(); // Set output status based on the input gate's evaluation
+                return inputStatus;
+            }
+            catch
+            {
+                Console.WriteLine("Eror evaluating output lamps");
+                return false;
+            }
+            
         }
 
         /// <summary>

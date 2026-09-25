@@ -36,8 +36,7 @@ namespace Circuits
                 p.Draw(paper);
             }
 
-            //Now draw the main part of the gate after setting which image to use based on whether the gate is selected or not
-
+            // Draw gate based on selected or not
             if (Selected)
             {
                 paper.DrawImage(Properties.Resources.NotGateRed, Left, Top);
